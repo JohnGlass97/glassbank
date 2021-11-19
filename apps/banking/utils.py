@@ -42,15 +42,19 @@ def conversion_to_GBP(currency):
     assert currency in CURRENCIES.keys()
 
     time = utc.localize(datetime.now())
-    obj, created = ConversionRate.objects.get_or_create(currency=currency)
-    if not created and obj.timestamp + timedelta(days=1) > time:
+    exists = True
+    try:
+        obj = ConversionRate.objects.get(currency=currency)
+    except:
+        exists = False
+    if exists and obj.timestamp + timedelta(days=1) > time:
         return obj.rate
     try:
         query = currency + "_GBP"
         response = requests.get(
             f"https://free.currconv.com/api/v7/convert?q={query}&compact=ultra&apiKey=ab9dc965f40bbecb5a1a")
         rate = float(response.json()[query])
-        obj = ConversionRate.objects.get(currency=currency)
+        obj, c = ConversionRate.objects.get_or_create(currency=currency)
         obj.rate = rate
         obj.save()
         return rate
