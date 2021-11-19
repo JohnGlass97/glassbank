@@ -6,6 +6,7 @@ import json
 from rest_framework import pagination
 from rest_framework.response import Response
 from datetime import datetime, timedelta
+from rest_framework.exceptions import APIException
 
 FIREBASE_SERVER_KEY = "AAAAlchymSI:APA91bFVS74kyLabhXD70Ns1U8zvgOlAIs2vJLUrjlzaOQJPiGkSJApxSsFDSrG3Pj9_gNvDGtfnSLj6z5ULKvLH-tqXxEEvnYt6Xgt7gQ9kkAKmEVp7-lgvv95UIb5RAQPT9_xx2ryr"
 
@@ -49,18 +50,21 @@ def conversion_to_GBP(currency):
     except ConversionRate.DoesNotExist:
         pass
     try:
-        query = currency + "_GBP"
         response = requests.get(
-            f"https://free.currconv.com/api/v7/convert?q={query}&compact=ultra&apiKey=ab9dc965f40bbecb5a1a")
-        rate = float(response.json()[query])
+            f"http://data.fixer.io/api/latest?access_key=193b17b414303de627a09f732aa6e5bf&symbols={currency},GBP")
+        rates = response.json()['rates']
+        rate = float(rates['GBP']/rates[currency])
         obj, c = ConversionRate.objects.get_or_create(currency=currency)
         obj.rate = rate
         obj.save()
         return rate
     except:
         print(traceback.format_exc())
+    try:
         assert obj.timestamp + timedelta(weeks=1) < time
         return obj.rate
+    except:
+        APIException("Could not convert currency.", code=500)
 
 
 def int_to_GBP(value, currency):
