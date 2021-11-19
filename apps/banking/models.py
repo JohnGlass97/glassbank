@@ -49,10 +49,11 @@ class Transaction(models.Model):
                 if matches > 1:
                     raise APIException("Duplicate Transaction Found!", 500)
                 return
-        sender.balance -= pennies
-        sender.save()
-        recip.balance += pennies
-        recip.save()
+        if sender != recip:
+            sender.balance -= pennies
+            sender.save()
+            recip.balance += pennies
+            recip.save()
         transaction = cls(sender=sender, recipient=recip, amount=pennies,
                           reference=ref, epoch=epoch, sender_bal=sender.balance, recip_bal=recip.balance)
         transaction.save()
