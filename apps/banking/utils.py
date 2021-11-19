@@ -42,13 +42,12 @@ def conversion_to_GBP(currency):
     assert currency in CURRENCIES.keys()
 
     time = utc.localize(datetime.now())
-    exists = True
     try:
         obj = ConversionRate.objects.get(currency=currency)
-    except:
-        exists = False
-    if exists and obj.timestamp + timedelta(days=1) > time:
-        return obj.rate
+        if obj.timestamp + timedelta(days=1) > time:
+            return obj.rate
+    except ConversionRate.DoesNotExist:
+        pass
     try:
         query = currency + "_GBP"
         response = requests.get(
