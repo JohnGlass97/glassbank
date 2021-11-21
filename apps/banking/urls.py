@@ -11,5 +11,6 @@ urlpatterns = [
     path('requests/<int:pk>', AnswerRequestView.as_view()),
     path('shop', ShopItemsView.as_view()),
     path('shop/<int:pk>', BuyItemView.as_view()),
-    path('conversion', ConversionToGBPView.as_view())
+    path('conversion', ConversionToGBPView.as_view()),
+    path('backup', BackupView.as_view())
 ]

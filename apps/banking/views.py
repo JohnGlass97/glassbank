@@ -136,3 +136,14 @@ class ConversionToGBPView(APIView):
             ConversionRate.objects.all(), currency=request.GET.get('currency', "EUR"))
         serializer = ConversionSerializer(conversion)
         return Response(serializer.data)
+
+
+class BackupView(APIView):
+    def get(self, request):
+        if not request.user.account.master:
+            return Response(status=403)
+        accountSerializer = AccountDetailedSerializer(
+            Account.objects.all(), many=True)
+        transactionSerializer = TransactionDetailedSerializer(
+            Transaction.objects.all(), many=True)
+        return Response({"accounts": accountSerializer.data, "transactions": transactionSerializer.data})
