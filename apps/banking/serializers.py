@@ -34,7 +34,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 class TransactionDetailedSerializer(TransactionSerializer):
-    class Meta(AccountBasicSerializer.Meta):
+    class Meta(TransactionSerializer.Meta):
         exclude = []
 
 
