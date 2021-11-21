@@ -10,20 +10,17 @@ class FirebaseTokenSerializer(serializers.Serializer):
                                   "max_length": "Token too long."})
 
 
-class AccountDetailedSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(source='user.username')
-
-    class Meta:
-        model = Account
-        fields = ['user', 'balance']
-
-
 class AccountBasicSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username')
 
     class Meta:
         model = Account
         fields = ['user']
+
+
+class AccountDetailedSerializer(AccountBasicSerializer):
+    class Meta(AccountBasicSerializer.Meta):
+        fields = AccountBasicSerializer.Meta.fields + ['balance']
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -34,6 +31,11 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         exclude = ['epoch', 'sender_bal', 'recip_bal']
         depth = 1
+
+
+class TransactionDetailedSerializer(TransactionSerializer):
+    class Meta(AccountBasicSerializer.Meta):
+        exclude = []
 
 
 class TransferSerializer(serializers.Serializer):
