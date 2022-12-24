@@ -93,7 +93,7 @@ def send_notification(f_id, title, body):
     return requests.post(URL, data=json.dumps(data), headers=headers)
 
 
-def bulkCreate():
+def bulk_reate():
     from apps.banking.models import Account, Transaction
     for i in range(100):
         acc = Account.objects.get(user_id=1)
