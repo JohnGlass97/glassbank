@@ -7,7 +7,7 @@ from .forms import RedeemForm
 
 
 def redeem(request):
-    err = "Placeholder"
+    err = "Enter code above"
     if request.method == "POST":
         form = RedeemForm(request.POST)
         if form.is_valid():
