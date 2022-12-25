@@ -16,7 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from apps.gifting.views import redeem
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('apps.banking.urls'))
+    path('api/', include('apps.banking.urls')),
+    path('gifts/redeem', redeem)
 ]

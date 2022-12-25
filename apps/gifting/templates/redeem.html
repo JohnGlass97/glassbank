@@ -1,0 +1,21 @@
+{% extends 'base.html' %} {% block title %} Redeem {% endblock %}
+<div></div>
+{% block content %}
+<h1 class="my-text">Redeem a Gift</h1>
+<form method="POST">
+  {% csrf_token %}
+  <label for="code"></label>
+  <div
+    style="
+      background-color: white;
+      padding: 15px;
+      display: inline;
+      border-radius: 5px;
+    "
+  >
+    <input type="number" name="code" id="code" />
+  </div>
+  <h3 style="color: green">{{ error }}</h3>
+  <button type="submit" class="button">Redeem Now</button>
+</form>
+{% endblock %}
