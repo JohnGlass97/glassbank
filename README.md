@@ -23,6 +23,18 @@ cd glassbank
 pipenv install
 ```
 
+Generate a secret key with the following command:
+
+```
+pipenv run python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+
+Create an `.env` file at the project root with the following contents:
+
+```
+DJANGO_SECRET_KEY=<GENERATED_SECRET_KEY>
+```
+
 Perform db migrations and start the server:
 
 ```

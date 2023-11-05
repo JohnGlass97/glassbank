@@ -2,13 +2,14 @@ import requests
 import traceback
 import pytz
 import json
+import os
 
 from rest_framework import pagination
 from rest_framework.response import Response
 from datetime import datetime, timedelta
 from rest_framework.exceptions import APIException
 
-FIREBASE_SERVER_KEY = "AAAAlchymSI:APA91bFVS74kyLabhXD70Ns1U8zvgOlAIs2vJLUrjlzaOQJPiGkSJApxSsFDSrG3Pj9_gNvDGtfnSLj6z5ULKvLH-tqXxEEvnYt6Xgt7gQ9kkAKmEVp7-lgvv95UIb5RAQPT9_xx2ryr"
+FIREBASE_SERVER_KEY = os.environ.get("FIREBASE_SERVER_KEY", "")
 
 CURRENCIES = {
     "GBP": "£",
@@ -77,6 +78,9 @@ def format_currency(value, currency):
 
 
 def send_notification(f_id, title, body):
+    if FIREBASE_SERVER_KEY == "":
+        return None
+
     print(title, body)
     URL = "https://fcm.googleapis.com/fcm/send"
     data = {
